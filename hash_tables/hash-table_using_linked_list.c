@@ -60,7 +60,7 @@ void append_records(node_t *head, char *key, char *value)
     current->next->next=NULL;
 }
 
-void adding_records(char *key, char *value, node_t *hash_array[])
+void add_record(char *key, char *value, node_t *hash_array[])
 {
     // пример использования этой функции
     node_t *head = NULL;
@@ -71,7 +71,7 @@ void adding_records(char *key, char *value, node_t *hash_array[])
 }
 
 //выдача value по ключу
-int conclusion_data(char *key, node_t *hash_array[])
+int print_record(char *key, node_t *hash_array[])
 {
     node_t *current = hash_array[hash_function(key)];
     if (current == NULL)
@@ -95,7 +95,7 @@ int conclusion_data(char *key, node_t *hash_array[])
 }
 
 //удаление элемента по ключу
-int delete_data(char *key, node_t *hash_array[])
+int delete_record(char *key, node_t *hash_array[])
 {
     node_t *head = hash_array[hash_function(key)];
     //указатель на первый элемент
@@ -130,7 +130,7 @@ int delete_data(char *key, node_t *hash_array[])
 }
 
 //обнавление value по ключу 
-int update_data(char *key, char *value, node_t *hash_array[])
+int update_record(char *key, char *value, node_t *hash_array[])
 {
     node_t *head = hash_array[hash_function(key)];
     if (head->datas.key2 == NULL)
@@ -157,7 +157,6 @@ int main()
 {
     node_t *hash_array[100000];
 
- 
     printf("fuzzing hash_funxion_char\n");
     //fuzzing hash_funxion_char 
     uint64_t collisions[len_array_collisions] = {0};
@@ -180,7 +179,6 @@ int main()
     {
         printf("%ld\n", collisions[i]);
     }
-   
 
     printf("\nfuzzing hash_table\n");
     //fuzzing hash_table
@@ -228,7 +226,7 @@ int main()
                 }
                 keys[index_keys][i+1] = '\0';
 
-                adding_records(keys[index_keys], value, hash_array);
+                add_record(keys[index_keys], value, hash_array);
                 index_keys += 1;
             }
 
@@ -238,7 +236,7 @@ int main()
                 if (index_keys > 0)
                 {
                     int index = rand() % index_keys;
-                    update_data(keys[index], value, hash_array);
+                    update_record(keys[index], value, hash_array);
                 }
             }
 
@@ -247,7 +245,7 @@ int main()
                 if (index_keys > 0)
                 {
                     int index = rand() % index_keys;
-                    conclusion_data(keys[index], hash_array);
+                    print_record(keys[index], hash_array);
                 }
 
             //delete
@@ -255,7 +253,7 @@ int main()
                 if (index_keys > 0)
                 {
                     int index = rand() % index_keys;
-                    delete_data(keys[index], hash_array);
+                    delete_record(keys[index], hash_array);
                 }
         }
     }
